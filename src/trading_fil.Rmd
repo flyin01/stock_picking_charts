@@ -1,0 +1,235 @@
+---
+title: "trading_fil"
+output: html_notebook
+---
+
+This notebook contains stock quotes.
+
+```{r}
+library(tidyquant)
+library(XLConnect)
+library(rJava)
+library(XLConnectJars) # Need newer Java version installed!
+```
+
+START HERE!
+
+Set todays date as a variable
+```{r}
+today <- Sys.Date()
+```
+
+
+### Using tidyquant package ###
+
+The tidyquant package is focused on retrieving, manipulating, and scaling financial data analysis in the easiest way possible.
+
+```{r, message=TRUE}
+library(tidyquant) # for pulling stock quotes with tq_get()
+library(zoo)       # for calculating rolling mean with rollmean()
+
+# Documentation:
+# https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
+```
+
+
+Plot stock data 1
+```{r, fig.width=9}
+# Pull stock data using tidyquant, set stock to the quote!
+stock <- "AAPL" 
+df <- tq_get(stock, get = "stock.prices", 
+                from = "2016-01-01", to = today)
+
+# Transaction dates
+# t <- as.Date("2018-12-10") # SOLD/BUY - brown/black dashed
+
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(stock," from",b1," to ",b2)) +
+  xlab("date")
+  #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
+```
+
+Plot stock data 2
+```{r, fig.width=9}
+# Pull stock data using tidyquant, set stock to the quote!
+stock <- "MCD" 
+df <- tq_get(stock, get = "stock.prices", 
+                from = "2016-01-01", to = today)
+
+# Transaction dates
+t <- as.Date("2018-08-30") # BUY - black dashed
+
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(stock," from",b1," to ",b2)) +
+  xlab("date") +
+  geom_vline(xintercept = t, linetype = 2,  color = "black", alpha = .5)
+```
+
+Plot stock data 3
+```{r, fig.width=9}
+# Pull stock data using tidyquant, set stock to the quote!
+stock <- "SNE" 
+df <- tq_get(stock, get = "stock.prices", 
+                from = "2016-01-01", to = today)
+
+# Transaction dates
+t <- as.Date("2018-12-10") # SOLD - brown solid
+
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(stock," from",b1," to ",b2)) +
+  xlab("date") +
+  geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
+```
+
+Plot stock data 4
+```{r, fig.width=9}
+# Pull stock data using tidyquant, set stock to the quote!
+stock <- "IBM" 
+df <- tq_get(stock, get = "stock.prices", 
+                from = "2016-01-01", to = today)
+
+# Transaction dates
+t <- as.Date("2018-12-10") # SOLD - brown solid
+
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(stock," from",b1," to ",b2)) +
+  xlab("date") +
+  geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
+```
+
+End of stock quotes!
+
+
+
+
+```{r}
+eur_usd <- tq_get("EUR/USD", 
+                  get = "exchange.rates", 
+
+                  from = Sys.Date() - lubridate::days(10))
+eur_usd
+df <- eur_usd
+
+# graph below doesnt really work
+ggplot(df, aes(x = as.factor(date), y = exchange.rate, group = 1, col = "exchange.rate")) +
+  geom_line() +
+  geom_line(data = df, aes(x = as.factor(date), y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = as.factor(date), y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_discrete(breaks = c(b1,b2)) +
+  ggtitle(paste("eur_usd"," from",b1," to ",b2)) +
+  xlab("date")
+
+```
+
+
+
+
+```{r}
+df_50  <- rollmean(df$close, 50, fill = NA)
+plot(rollmax(df$close, 50))
+plot(df_50)
+df_200 <- rollmean(df$close, 200, fill = NA)
+plot(df_200)
+
+```
+
+
+```{r}
+tq_transmute_fun_options() # Check all functions of tidyquant packages
+```
+
+
+
+Plot stock index data
+```{r, fig.width=9}
+
+# Get the available index
+tq_index_options()
+
+# Get available sources
+tq_get_options()
+
+# Get all stocks in a stock exchange
+nyse_stocklist <- tq_exchange("NYSE")
+head(nyse_stocklist)
+
+nyse_stocklist %>%
+  group_by(sector) %>%
+  summarise(nbr_companies = n()) %>%
+  arrange(-nbr_companies)
+
+tq_transmute_fun_options() # Check all functions of tidyquant packages
+
+# Source for more: https://www.business-science.io/
+```
+
+Below produces and error. Java version issue?
+```{r}
+# Pull index data using tidyquant
+df <- tq_index("SP500")
+# Above should load in 1.2 million rows of SP500 stocks
+
+# Below converts all of SP500 into percent monthly percent units for all stocks
+sp_500 %>%
+  group_by(symbol) %>%
+  tq_transmute(adjusted, mutate_fun = monthlyReturn)
+```
+
+
+
+```{r}
+day1 <- as.Date("2018-11-30")
+day1 <- as.Date("2018-12-02")
+
+if(today > day1) {
+  print("Idag är det en dag efter:"); day1
+} else {
+  print("Idag är det en dag före") ; day1
+}
+rm(today); rm(day1)
+```
+
+
+
+
+TBD
+
+
