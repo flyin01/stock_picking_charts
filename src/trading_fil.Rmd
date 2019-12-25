@@ -28,6 +28,7 @@ Get all stocks in a stock index or sotck exchange in tibble format.
 tq_index_options() # Check available index: "DOW", "DOWGLOBAL" "SP400" "SP500" "SP600"
 
 index_df <- tq_index("DOW") # Store the stocks for the index
+
 glimpse(index_df)
 ```
 

@@ -1,6 +1,6 @@
 ### stock picking charts ###
 
-Using tidyquant package
+Using tidyquant package and tidyverse to plot
 
 #### R files ####
 trading_fil.Rmd
