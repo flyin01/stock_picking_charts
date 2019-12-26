@@ -3,7 +3,8 @@ title: "trading_fil"
 output: html_notebook
 ---
 
-This notebook contains stock quotes from yahoo finance.
+This notebook contains stock quotes from yahoo finance.  
+The purpose is to plot stock prices over time and look for the "death cross".
 
 Set todays date as a variable
 ```{r}
@@ -33,7 +34,6 @@ glimpse(index_df)
 ```
 
 
-
 Plot stock data 1
 ```{r, fig.width=12}
 # Pull stock data using tidyquant, set stock to the quote!
@@ -54,7 +54,7 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
                            group = 1, col = "ma_200")) +
   scale_x_date(breaks = c(b1,b2)) +
-  ggtitle(paste(stock," from",b1," to ",b2)) +
+  ggtitle(paste(stock, names(df)[5], " from",b1," to ",b2)) +
   xlab("date") #+
   #theme_minimal() +
   #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
@@ -80,7 +80,7 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
                            group = 1, col = "ma_200")) +
   scale_x_date(breaks = c(b1,b2)) +
-  ggtitle(paste(stock," from",b1," to ",b2)) +
+  ggtitle(paste(stock, names(df)[5]," from",b1," to ",b2)) +
   xlab("date") +
   geom_vline(xintercept = t, linetype = 2,  color = "black", alpha = .5)
 ```
@@ -105,14 +105,14 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
                            group = 1, col = "ma_200")) +
   scale_x_date(breaks = c(b1,b2)) +
-  ggtitle(paste(stock," from",b1," to ",b2)) +
+  ggtitle(paste(stock, names(df)[5]," from",b1," to ",b2)) +
   xlab("date") +
   geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
 ```
 
 Plot stock data 4
 ```{r, fig.width=12}
-# Pull stock data using tidyquant, set stock to the quote!
+# IBM
 stock <- "IBM" 
 df <- tq_get(stock, get = "stock.prices", 
                 from = "2016-01-01", to = today)
@@ -130,15 +130,15 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
                            group = 1, col = "ma_200")) +
   scale_x_date(breaks = c(b1,b2)) +
-  ggtitle(paste(stock," from",b1," to ",b2)) +
+  ggtitle(paste(stock, names(df)[5]," from",b1," to ",b2)) +
   xlab("date") +
   geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
 ```
 
 Plot stock data 5
 ```{r, fig.width=12}
-# Pull stock data using tidyquant, set stock to the quote!
-stock <- "MCD" 
+# Microsoft
+stock <- "MSFT" 
 df <- tq_get(stock, get = "stock.prices", 
                 from = "2016-01-01", to = today)
 
@@ -155,7 +155,32 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
                            group = 1, col = "ma_200")) +
   scale_x_date(breaks = c(b1,b2)) +
-  ggtitle(paste(stock," from",b1," to ",b2)) +
+  ggtitle(paste(stock, names(df)[5]," from",b1," to ",b2)) +
+  xlab("date") #+
+  # geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
+```
+
+Plot stock data 6
+```{r, fig.width=12}
+# Johnson and Johnson
+stock <- "JNJ" 
+df <- tq_get(stock, get = "stock.prices", 
+                from = "2016-01-01", to = today)
+
+# Transaction dates
+#t <- as.Date("2018-12-10") # SOLD - brown solid
+
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 50, fill = NA, align = "right"), 
+                           group = 1, col = "ma_50")) +
+  geom_line(data = df, aes(x = date, y = rollmean(close, 200, fill = NA, align = "right"), 
+                           group = 1, col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(stock, names(df)[5]," from",b1," to ",b2)) +
   xlab("date") #+
   # geom_vline(xintercept = t, linetype = 1,  color = "brown", alpha = .5)
 ```
@@ -169,7 +194,7 @@ Currency pair plot
 eur_usd <- tq_get("EUR/USD", 
                   get = "exchange.rates", 
 
-                  from = Sys.Date() - lubridate::days(1000))
+                  from = Sys.Date() - lubridate::days(179))
 df <- eur_usd
 
 b1 <- as.Date(min(df$date))
