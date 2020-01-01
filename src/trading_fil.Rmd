@@ -24,7 +24,7 @@ library(tidyverse) # for plotting
 # https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
 ```
 
-Get all stocks in a stock index or sotck exchange in tibble format.
+Get all stocks in a stock index or stock exchange in tibble format.
 ```{r}
 tq_index_options() # Check available index: "DOW", "DOWGLOBAL" "SP400" "SP500" "SP600"
 
