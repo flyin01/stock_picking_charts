@@ -38,8 +38,10 @@ Plot stock data 1
 ```{r, fig.width=12}
 # Pull stock data using tidyquant, set stock to the quote!
 stock <- "AAPL" 
-df <- tq_get(stock, get = "stock.prices", 
-                from = "2016-01-01", to = today)
+df <- tq_get(stock, 
+             get = "stock.prices",
+             from = "2016-01-01", 
+             to = today)
 
 # Transaction dates
 # t <- as.Date("2018-12-10") # SOLD/BUY - brown/black dashed
@@ -192,8 +194,7 @@ Currency pair plot
 
 ```{r, fig.width=12}
 eur_usd <- tq_get("EUR/USD", 
-                  get = "exchange.rates", 
-
+                  get = "exchange.rates",
                   from = Sys.Date() - lubridate::days(179))
 df <- eur_usd
 
