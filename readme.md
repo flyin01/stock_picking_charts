@@ -1,7 +1,8 @@
 ### stock picking charts ###
 
-Using tidyquant package and tidyverse to plot
+Using tidyquant package and tidyverse to plot stock quotes  
 
-#### R files ####
+#### src ####  
+Contains R files:  
 trading_fil.Rmd </br>
 trading_fil.nb.html
