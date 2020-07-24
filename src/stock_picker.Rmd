@@ -1,0 +1,78 @@
+---
+title: "stock_picker"
+output: html_notebook
+---
+
+The purpose of this file is to use evaluate stocks against some selection critiera to evaluate if the stock could be a potential buy. This is done by applying a logic that checks that some condition is fulfilled for each stock.
+
+Set today´s date as a variable
+```{r}
+today <- Sys.Date()
+```
+
+Loading required packages
+
+### Tidyquant and other
+
+```{r, message=TRUE}
+library(tidyquant) # for pulling stock quotes with tq_get()
+library(zoo)       # for calculating rolling mean with rollmean()
+library(tidyverse) # for plotting
+# Documentation:
+# https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
+```
+###Pull stock info
+
+```{r}
+# Docs: https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
+
+# check what indexes we have in tidyquant
+tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
+
+index_list <- tq_index_options()
+x <- 1 # the first exchange in the list e.g "DOW"
+
+# get quotes one index
+tq_index("DOW")
+
+index_info <- tq_index(index_list[x])
+glimpse(index_info)
+```
+Above we have a tibble with X rows, one for each company in the index.
+
+Next, get stock info for one company from the tibble and examine the results.
+```{r}
+# use tq_get()
+tq_get_options()
+```
+We want to use "stock_prices" argument.
+```{r}
+tq_get("AAPL", 
+       get = "stock.prices",
+       from = today - 3*365,
+       to = today)
+```
+
+Try if this can be done using tidyverse.
+```{r}
+index_info %>%
+  select(symbol) %>%
+  head(1) %>%
+  tq_get(get = "stock.prices", 
+         from = today - 3*365,
+         to = today)
+```
+
+Now we want to create the criteria of selection.
+
+- Compare MA200 with MA50
+- If MA50 > MA200 then select the stock
+- Set time period?
+
+TBD
+
+Next, try to loop over the tibble row wise for each company and collect stock info.
+
+TBD
+
+...
