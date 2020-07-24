@@ -55,23 +55,96 @@ tq_get("AAPL",
 
 Try if this can be done using tidyverse.
 ```{r}
-index_info %>%
+df <- index_info %>%
   select(symbol) %>%
-  head(1) %>%
+  head(1) %>% # Take the first symbol for now
   tq_get(get = "stock.prices", 
          from = today - 3*365,
          to = today)
+df
 ```
 
 Now we want to create the criteria of selection.
 
-- Compare MA200 with MA50
+- Calculate and Compare MA200 with MA50
 - If MA50 > MA200 then select the stock
 - Set time period?
 
-TBD
+Calculate and compare MA200 and MA50
+```{r}
+# select symbol
+symbol_col <- df %>%
+  select(symbol)
 
-Next, try to loop over the tibble row wise for each company and collect stock info.
+# select date
+date_col <- df %>%
+  select(date)
+
+# calculate rolling 50
+roll_50 <- df %>%
+  select(close) %>%
+  rollmean(50,
+           fill = NA,
+           align = "right")
+
+# calculate rolling 200
+roll_200 <- df %>%
+  select(close) %>%
+  rollmean(200,
+           fill = NA,
+           align = "right")
+
+# Compare the ma 50 and ma 200
+df_comp <- data.frame("symbol"   = symbol_col,
+                      "date"     = date_col,
+                      "ma_50"    = roll_50,
+                      "ma_200"   = roll_200)
+
+names(df_comp) <- c("symbol", "date", "ma_50", "ma_200") 
+
+# check tail
+df_comp %>%
+  tail()
+
+# check logic if ma_50 >= ma_200
+df_comp %>%
+  filter(ma_50 >= ma_200,
+         date == max(date))%>%
+  select(symbol,date, ma_50, ma_200) # select the date and the max 
+```
+
+These are the stocks that we want to plot then.
+These are potential buy candidates with upside momentum.
+
+
+Plot the data
+```{r}
+# set start and end date for the plot
+b1 <- as.Date(min(df$date))
+b2 <- as.Date(max(df$date))
+
+ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df, aes(x = date, 
+                           y = rollmean(close, 50, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_50")) +
+  geom_line(data = df, aes(x = date, 
+                           y = rollmean(close, 200, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste(df[1,1], names(df)[5], " from",b1," to ",b2)) +
+  xlab("date") #+
+  #theme_minimal() +
+  #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
+```
+
+Next, try to loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. The rest we don´t care about.
 
 TBD
 
