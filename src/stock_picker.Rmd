@@ -3,7 +3,7 @@ title: "stock_picker"
 output: html_notebook
 ---
 
-The purpose of this file is to use evaluate stocks against some selection critiera to evaluate if the stock could be a potential buy. This is done by applying a logic that checks that some condition is fulfilled for each stock.
+The purpose of this file is to use evaluate stocks against some selection criteria to evaluate if the stock could be a potential buy. This is done by applying a logic that checks that some condition is fulfilled for each stock.
 
 Set today´s date as a variable
 ```{r}
@@ -115,7 +115,7 @@ df_comp %>%
 
 These are the stocks that we want to plot then.
 These are potential buy candidates with upside momentum.
-
+We should add a filtering criteria for this date, only select the symbols that have the date close to today.
 
 Plot the data
 ```{r}
@@ -144,8 +144,125 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
 ```
 
-Next, try to loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. The rest we don´t care about.
+Next, try to loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. But add a proper filter to capture date thas is closed to today. The rest of the stocks we don´t care about.
 
-TBD
 
-...
+### Loop Construct ###
+
+```{r}
+# check unique values in index_info
+lapply(index_info, function(x) {length(unique(x))})
+```
+
+
+```{r}
+
+#i <- "HD"
+
+# create two empty df for the results
+df_comp_results <- data.frame("symbol" = as.character(),
+                              "date"   = as.Date(x = integer(0), origin = "1970-01-01"),
+                              "close"  = as.numeric(),
+                              "ma_50"  = as.numeric(),
+                              "ma_200" = as.numeric())
+
+df_results <- data.frame("symbol" = as.character(),
+                         "date"   = as.Date(x = integer(0), origin = "1970-01-01"),
+                         "close"  = as.numeric(),
+                         "ma_50"  = as.numeric(),
+                         "ma_200" = as.numeric())
+
+# loop over each stock in the index_info
+for (i in unique(index_info$symbol)) {
+  # segment the data
+  df <- index_info %>%
+    filter(symbol == i) %>%
+    select(symbol) %>%
+    head(1) %>% 
+      tq_get(get = "stock.prices",
+             from = today - 3*365,
+             to = today)
+
+      ## calculate moving averages
+  
+      # select symbol
+      symbol_col <- df %>%
+        select(symbol)
+
+      # select date
+      date_col <- df %>%
+        select(date)
+      
+      # select close
+      close <- df %>%
+        select(close)
+    
+      # calculate rolling 50
+      roll_50 <- df %>%
+        select(close) %>%
+        rollmean(50,
+                 fill = NA,
+                 align = "right")
+    
+      # calculate rolling 200
+      roll_200 <- df %>%
+        select(close) %>%
+        rollmean(200,
+                 fill = NA,
+                 align = "right")
+    
+      # Compare the ma 50 and ma 200
+      df_comp <- data.frame("symbol"   = symbol_col,
+                            "date"     = date_col,
+                            "close"    = close,
+                            "ma_50"    = roll_50,
+                            "ma_200"   = roll_200)
+    
+      names(df_comp) <- c("symbol", "date", "close", "ma_50", "ma_200") 
+    
+      # check logic if ma_50 >= ma_200
+      df_comp_summary <- df_comp %>% 
+        filter(ma_50 >= ma_200,
+               date == max(date))%>%
+        select(symbol,date, close, ma_50, ma_200) # select the date and the max 
+
+  # bind results
+  df_comp_results <- rbind(df_comp_results, df_comp)   # all rows per symbol  
+  df_results      <- rbind(df_results,df_comp_summary) # one row per symbol
+}
+
+# clean up
+rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
+```
+
+Create plots
+```{r}
+
+# set start and end date for the plot
+b1 <- as.Date(min(df_plot$date))
+b2 <- as.Date(max(df_plot$date))
+
+# plot only the symbols that are in the df_results
+df_plot <- df_comp_results %>%
+  filter(symbol %in% unique(df_results$symbol))
+
+df_plot %>%
+  ggplot(aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df_plot, aes(x = date,
+                                y = ma_50,
+                                group = 1,
+                                col = "ma_50")) +
+  geom_line(data = df_plot, aes(x = date,
+                                y = ma_200,
+                                group = 1,
+                                col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste("By stock symbol the close, ma_200, ma_50"," from",b1," to ",b2)) +
+  xlab("date") +
+  facet_wrap(~symbol, scales = "free")
+
+```
+The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
+
+
