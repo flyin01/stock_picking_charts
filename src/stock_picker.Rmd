@@ -264,5 +264,6 @@ df_plot %>%
 
 ```
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
+Next, add what point in time the rule should apply.
 
 
