@@ -21,6 +21,7 @@ library(tidyverse) # for plotting
 # Documentation:
 # https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
 ```
+
 ###Pull stock info
 
 ```{r}
@@ -30,7 +31,7 @@ library(tidyverse) # for plotting
 tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
 
 index_list <- tq_index_options()
-x <- 1 # the first exchange in the list e.g "DOW"
+x <- 1 # the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
 
 # get quotes one index
 tq_index("DOW")
