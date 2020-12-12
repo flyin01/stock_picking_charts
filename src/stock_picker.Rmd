@@ -41,6 +41,14 @@ glimpse(index_info)
 ```
 Above we have a tibble with X rows, one for each company in the index.
 
+Plot the weights of company on index - Out of curiosity mostly
+```{r}
+index_info %>%
+  ggplot(aes(x = reorder(company, weight), y = weight)) +
+  geom_col() +
+  coord_flip()
+```
+
 Next, get stock info for one company from the tibble and examine the results.
 ```{r}
 # use tq_get()
