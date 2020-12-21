@@ -46,7 +46,8 @@ Plot the weights of company on index - Out of curiosity mostly
 index_info %>%
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
-  coord_flip()
+  coord_flip() +
+  xlab("Company Name")
 ```
 
 Next, get stock info for one company from the tibble and examine the results.
