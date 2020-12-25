@@ -32,9 +32,10 @@ tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
 
 index_list <- tq_index_options()
 x <- 1 # the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
+#x <- 2 # "DOWGLOBAL", tq_get() failed on "MT-NL"
 
 # get quotes one index
-tq_index("DOW")
+tq_index("DOWGLOBAL")
 
 index_info <- tq_index(index_list[x])
 glimpse(index_info)
@@ -43,7 +44,10 @@ Above we have a tibble with X rows, one for each company in the index.
 
 Plot the weights of company on index - Out of curiosity mostly
 ```{r}
+#fig.width=12, fig.height=14
 index_info %>%
+  #arrange(-weight) %>%
+  #head(50) %>% # top 50 
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
   coord_flip() +
@@ -276,5 +280,5 @@ df_plot %>%
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
   
-Comment to above plots: DIS had high spike on 2020-12-11 and even higher on 2020-12-18!
+Comment to above plots: DIS had high spike on 2020-12-11 flatter on 2020-12-24!
 
