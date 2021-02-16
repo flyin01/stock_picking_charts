@@ -281,6 +281,6 @@ The above plot contains the stocks that fulfill our selection criteria of ma_50 
 Next, add what point in time the rule should apply.  
   
 Comment to above plots: DIS had high spike on 2020-12-11 flatter on 2020-12-24 and on 2021-02-02 has turned down.  
-MSFT spikes in Feb.
+MSFT spikes end of Feb.
 
 
