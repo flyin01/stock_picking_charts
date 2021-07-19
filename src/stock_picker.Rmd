@@ -280,7 +280,7 @@ df_plot %>%
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
   
-Comment to above plots: AAPL and DIS have turned and approaching death-cross on 2021-06-25.  
+Comment to above plots: AAPL and DIS have turned was approaching death-cross but avoided it on 2021-07-19.  
 MSFT is trending higher steadily.
 
 
