@@ -158,7 +158,7 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
   #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
 ```
 
-Next, try to loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. But add a proper filter to capture date thas is closed to today. The rest of the stocks we don´t care about.
+Next, we loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. We could add a proper filter to capture date that is closed to today. The rest of the stocks we don´t care about.
 
 
 ### Loop Construct ###
@@ -279,8 +279,6 @@ df_plot %>%
 ```
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-  
-Comment to above plots: AAPL and DIS have turned was approaching death-cross but avoided it on 2021-07-19.  
-MSFT is trending higher steadily.
+Comment to above plots: AAPL, GS, MSFT are all time high and DIS is approaching death-cross on 2021-08-16.  
 
 
