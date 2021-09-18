@@ -279,6 +279,6 @@ df_plot %>%
 ```
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-Comment to above plots: AAPL, GS, MSFT are all time high and DIS is approaching death-cross on 2021-08-16.  
+Comment to above plots: AAPL, MSFT are around all time high and DIS was approaching death-cross on 2021-08-16 and is now out of the list. Several stocks have turned down in aug-sep.  
 
 
