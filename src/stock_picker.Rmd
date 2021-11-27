@@ -47,7 +47,7 @@ Plot the weights of company on index - Out of curiosity mostly
 #fig.width=12, fig.height=14
 index_info %>%
   #arrange(-weight) %>%
-  #head(50) %>% # top 50 
+  #head(30) %>% # top 50 
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
   coord_flip() +
@@ -61,7 +61,7 @@ tq_get_options()
 ```
 We want to use "stock_prices" argument.
 ```{r}
-tq_get("AAPL", 
+tq_get("TSLA", 
        get = "stock.prices",
        from = today - 3*365,
        to = today)
@@ -279,6 +279,6 @@ df_plot %>%
 ```
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-Comment to above plots: AXP, JPM moving towards all time high and IBM, MMM,MRK approaching death-cross on 2021-09-29.
+Comment to above plots: AAPL, HD, MCD, MSFT moving towards all time high and IBM, MMM has now 2021-11-27 gone under death-cross since being close to it on 2021-09-29.
 
 
