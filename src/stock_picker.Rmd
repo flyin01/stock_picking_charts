@@ -61,10 +61,12 @@ tq_get_options()
 ```
 We want to use "stock_prices" argument.
 ```{r}
-tq_get("TSLA", 
+df <- tq_get("TSLA", 
        get = "stock.prices",
        from = today - 3*365,
        to = today)
+
+head(df)
 ```
 
 Try if this can be done using tidyverse.
@@ -279,6 +281,6 @@ df_plot %>%
 ```
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-Comment to above plots: AAPL, HD, MCD, MSFT moving towards all time high and IBM, MMM is now 2021-12-04 still below death-cross since being close to it on 2021-09-29.
+Comment to above plots: AAPL, MCD, MSFT moving towards all time high and TRV is heading towards death-cross. IBM, MMM is now 2021-12-27 still below death-cross since being close to it on 2021-09-29.
 
 
