@@ -253,6 +253,7 @@ rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
 
 Create plots
 ```{r}
+# previous version - for comparison
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
@@ -279,6 +280,36 @@ df_plot %>%
   facet_wrap(~symbol, scales = "free")
 
 ```
+
+```{r}
+# latest version
+
+# plot only the symbols that are in the df_results
+df_plot <- df_comp_results %>%
+  filter(symbol %in% unique(df_results$symbol))
+
+# set start and end date for the plot
+b1 <- as.Date(min(df_plot$date))
+b2 <- as.Date(max(df_plot$date))
+
+df_plot %>%
+  ggplot(aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df_plot, aes(x = date,
+                                y = ma_50,
+                                group = 1,
+                                col = "ma_50")) +
+  geom_line(data = df_plot, aes(x = date,
+                                y = ma_200,
+                                group = 1,
+                                col = "ma_200")) +
+  scale_x_date(breaks = c(b1,b2)) +
+  ggtitle(paste("By stock symbol the close, ma_200, ma_50"," from",b1," to ",b2)) +
+  xlab("date") +
+  facet_wrap(~symbol, scales = "free")
+
+```
+
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
 Comment to above plots: AAPL, MCD, MSFT moving towards all time high and TRV is heading towards death-cross. IBM, MMM is now 2021-12-27 still below death-cross since being close to it on 2021-09-29.
