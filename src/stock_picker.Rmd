@@ -253,7 +253,7 @@ rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
 
 Create plots
 ```{r}
-# previous version - for comparison
+# latest version
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
@@ -282,7 +282,7 @@ df_plot %>%
 ```
 
 ```{r}
-# latest version
+# previous version
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
@@ -312,6 +312,6 @@ df_plot %>%
 
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-Comment to above plots: AAPL, MCD, MSFT moving towards all time high and TRV is heading towards death-cross. IBM, MMM is now 2021-12-27 still below death-cross since being close to it on 2021-09-29.
+Comment to above plots: There was a major drop in stock prices globally in third week of Jan 2022. Due to Ukraine crisis and Omikron. Several stocks are moving towards deach-cross AXP, CRM, GS, JPM, MRK, TRV on 2021-01-26.
 
 
