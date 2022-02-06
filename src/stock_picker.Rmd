@@ -69,7 +69,7 @@ df <- tq_get("TSLA",
 head(df)
 ```
 
-Try if this can be done using tidyverse.
+Repeat using tidyverse.
 ```{r}
 df <- index_info %>%
   select(symbol) %>%
@@ -312,6 +312,6 @@ df_plot %>%
 
 The above plot contains the stocks that fulfill our selection criteria of ma_50 above ma_200.
 Next, add what point in time the rule should apply.  
-Comment to above plots: There was a major drop in stock prices globally in third week of Jan 2022. Due to Ukraine crisis and Omikron. Several stocks are moving towards deach-cross AXP, CRM, GS, JPM, MRK, TRV on 2021-01-26.
+Comment to above plots: There was a major drop in stock prices globally in third week of Jan 2022. Due to Ukraine crisis and Omikron. Several stocks passed the death-cross AXP, CRM, GS, JPM while MRK, TRV are heading towards it on 2022-02-06.
 
 
