@@ -251,7 +251,7 @@ for (i in unique(index_info$symbol)) {
 rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
 
 # store the df locally
-# write.csv2(df_comp_results, file="df_comp_results.csv")
+#write.csv2(df_comp, file="df_comp.csv")
 ```
 
 Create plots
@@ -320,4 +320,5 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-02-24 Russia invaded Ukraine. As of 2022-03-08 AMGN and IBM has risen above the death-cross again.
 At 2022-04-03 4 stock have passed the death-cross compared to previous period. CSCO, HD, IBM, MCD, MSFT,WBA and CAT, DOW are back up again.
 2022-04-10. No change in terms of stocks picked from 2022-04-01.
+2022-04-25. Same stocks in the chart except WMT which bounced back up from under death-cross.
 
