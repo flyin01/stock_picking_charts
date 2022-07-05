@@ -4,8 +4,8 @@ library(tibble)
 library(ggplot2)
 
 set.seed(42)
-mu <- 0
-sigma <- 0.1
+#mu <- 0
+#sigma <- 0.1
 
 # This is our predefined function
 f <- function(x) 3*x^2 + 2*x + 1
