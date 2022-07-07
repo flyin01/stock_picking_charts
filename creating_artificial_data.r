@@ -21,3 +21,15 @@ tibble(x=x, y=y) %>%
   ggplot(aes(x,y)) +
   geom_point(colour = "dark blue", size = 3) +
   geom_function(fun = f, colour = "red", size = 0.8)
+
+
+# Another linear predefined function
+f <- function(x) - 1.2*x + 1
+
+# store data to df
+df <-tibble(x=x,y=y)
+head(df)
+
+# fit linear model
+mod <- lm(formula = y ~ x, data=df)
+summary(mod)
