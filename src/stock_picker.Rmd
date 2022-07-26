@@ -319,4 +319,5 @@ Comment to above plots: There was a major drop in stock prices globally in third
 GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-02-24 Russia invaded Ukraine. 
 2022-07-01 Only 10 stocks above death-cross.
+2022-07-26. 8 stocks above dc. CAT and DOW is out since start of month.
 
