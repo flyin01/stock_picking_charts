@@ -33,3 +33,9 @@ head(df)
 # fit linear model
 mod <- lm(formula = y ~ x, data=df)
 summary(mod)
+
+# add 2nd order term
+df$x2 = df$x^2
+
+mod2 <- lm(formula = y ~ x + x2, data=df)
+summary(mod2)
