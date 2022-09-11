@@ -61,6 +61,7 @@ tq_get_options()
 ```
 We want to use "stock_prices" argument.
 ```{r}
+# Alt 1. Select specific stock manually!
 df <- tq_get("TSLA", 
        get = "stock.prices",
        from = today - 3*365,
@@ -71,6 +72,7 @@ head(df)
 
 Repeat using tidyverse.
 ```{r}
+# Alt 2.
 df <- index_info %>%
   select(symbol) %>%
   head(1) %>% # Take the first symbol for now
@@ -256,7 +258,7 @@ rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
 
 Create plots
 ```{r}
-# latest version
+# version 1
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
@@ -285,7 +287,7 @@ df_plot %>%
 ```
 
 ```{r}
-# previous version
+# version 2
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
@@ -318,7 +320,5 @@ Next, add what point in time the rule should apply.
 Comment to above plots: There was a major drop in stock prices globally in third week of Jan 2022. Due to Ukraine crisis and Omikron. Several stocks passed the death-cross AXP, CRM, GS, JPM while MRK, TRV are close to it on 2022-02-13.
 GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-02-24 Russia invaded Ukraine. 
-2022-07-01 Only 10 stocks above death-cross.
-2022-07-26. 8 stocks above dc. CAT and DOW is out since start of month.
-2022-08-28. 8 stocks abov dc. MRK, TRV is out and MCD is in.
-
+2022-08-28. 8 stocks above dc. MRK, TRV is out and MCD is in.
+2022-09-11. 7 stocks above dc. JNJ is out
