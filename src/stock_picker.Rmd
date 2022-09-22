@@ -22,7 +22,7 @@ library(tidyverse) # for plotting
 # https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
 ```
 
-###Pull stock info
+### Pull stock info
 
 ```{r}
 # Docs: https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ01-core-functions-in-tidyquant.html
@@ -322,3 +322,4 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-02-24 Russia invaded Ukraine. 
 2022-08-28. 8 stocks above dc. MRK, TRV is out and MCD is in.
 2022-09-11. 7 stocks above dc. JNJ is out
+2022-09-22. 6 stocks above dc. IBM is out
