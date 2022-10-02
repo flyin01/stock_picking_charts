@@ -1,4 +1,4 @@
-# t-test comparisons
+# t-test vs KS-tests - a comparison
 
 group_a <- rnorm(n=20, mean=0, sd=1)
 group_b <- rnorm(n=20, mean=0, sd=3)
@@ -38,7 +38,14 @@ print(res$p.value)
 # cannot reject the h0 of 0 diff in mean
 
 # 2. KS (Kolmogovor-Smirnov) test - a non-parametric and distribution free test.
+res2 <- ks.test(x=df$group_a,
+                y=df$group_b,
+                alternative = "two.sided")
 
-# JATKA TÄSTÄ
+res2
+print(res2$p.value) # 0.03354
+# What is the implication of this?
+
+# Ref - Lue valmiiks
 # https://towardsdatascience.com/when-to-use-the-kolmogorov-smirnov-test-dd0b2c8a8f61
 
