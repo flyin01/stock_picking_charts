@@ -39,3 +39,6 @@ get_streaks %>%
     x = "Consecutive day by day increases in share  price",
     y = "Probability"
   )
+
+# write data to csv
+write.csv2(mcd_stock_price, file = "mcd_stock_price.csv")
