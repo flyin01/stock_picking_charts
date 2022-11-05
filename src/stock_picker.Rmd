@@ -31,14 +31,14 @@ library(tidyverse) # for plotting
 tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
 
 index_list <- tq_index_options()
-x <- 1 # the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
-#x <- 2 # "DOWGLOBAL", tq_get() failed on "MT-NL"
+# the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
+#x <- 1 # "DOW", 30
+x <- 2 # "DOWGLOBAL", 156
 
 # get quotes one index
-tq_index("DOWGLOBAL")
-
 index_info <- tq_index(index_list[x])
 glimpse(index_info)
+index_info
 ```
 Above we have a tibble with X rows, one for each company in the index.
 
@@ -47,7 +47,7 @@ Plot the weights of company on index - Out of curiosity mostly
 #fig.width=12, fig.height=14
 index_info %>%
   #arrange(-weight) %>%
-  #head(30) %>% # top 50 
+  head(30) %>% # top 50 
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
   coord_flip() +
@@ -64,7 +64,7 @@ We want to use "stock_prices" argument.
 # Alt 1. Select specific stock manually!
 df <- tq_get("NFLX", 
        get = "stock.prices",
-       from = today - 3*365,
+       from = today - 4*365,
        to = today)
 
 head(df)
@@ -193,56 +193,70 @@ df_results <- data.frame("symbol" = as.character(),
 # loop over each stock in the index_info
 for (i in unique(index_info$symbol)) {
   # segment the data
-  df <- index_info %>%
-    filter(symbol == i) %>%
-    select(symbol) %>%
-    head(1) %>% 
+  
+  ## Data collection step fails sometimes, skip symbol if it generates warning/error while fetching data
+  skip_to_next <- FALSE
+  
+  tryCatch(
+    # segment the data
+    {df <- index_info %>%
+      filter(symbol == i) %>%
+      select(symbol) %>%
+      head(1) %>% 
       tq_get(get = "stock.prices",
              from = today - 3*365,
              to = today)
-
-      ## calculate moving averages
-  
-      # select symbol
-      symbol_col <- df %>%
-        select(symbol)
-
-      # select date
-      date_col <- df %>%
-        select(date)
+    }, warning = function(w) {
+      skip_to_next <<- TRUE
       
-      # select close
-      close <- df %>%
-        select(close)
-    
-      # calculate rolling 50
-      roll_50 <- df %>%
-        select(close) %>%
-        rollmean(50,
-                 fill = NA,
-                 align = "right")
-    
-      # calculate rolling 200
-      roll_200 <- df %>%
-        select(close) %>%
-        rollmean(200,
-                 fill = NA,
-                 align = "right")
-    
-      # Compare the ma 50 and ma 200
-      df_comp <- data.frame("symbol"   = symbol_col,
-                            "date"     = date_col,
-                            "close"    = close,
-                            "ma_50"    = roll_50,
-                            "ma_200"   = roll_200)
-    
-      names(df_comp) <- c("symbol", "date", "close", "ma_50", "ma_200") 
-    
-      # check logic if ma_50 >= ma_200
-      df_comp_summary <- df_comp %>% 
-        filter(ma_50 >= ma_200,
-               date == max(date))%>%
-        select(symbol,date, close, ma_50, ma_200) # select the date and the max 
+    }, error = function(e) {
+      skip_to_next <<- TRUE
+      })
+  
+  if(skip_to_next) { next }
+
+  ## calculate moving averages
+
+  # select symbol
+  symbol_col <- df %>%
+    select(symbol)
+
+  # select date
+  date_col <- df %>%
+    select(date)
+  
+  # select close
+  close <- df %>%
+    select(close)
+
+  # calculate rolling 50
+  roll_50 <- df %>%
+    select(close) %>%
+    rollmean(50,
+             fill = NA,
+             align = "right")
+
+  # calculate rolling 200
+  roll_200 <- df %>%
+    select(close) %>%
+    rollmean(200,
+             fill = NA,
+             align = "right")
+
+  # Compare the ma 50 and ma 200
+  df_comp <- data.frame("symbol"   = symbol_col,
+                        "date"     = date_col,
+                        "close"    = close,
+                        "ma_50"    = roll_50,
+                        "ma_200"   = roll_200)
+
+  names(df_comp) <- c("symbol", "date", "close", "ma_50", "ma_200") 
+
+  # check logic if ma_50 >= ma_200
+  df_comp_summary <- df_comp %>% 
+    filter(ma_50 >= ma_200,
+           date == max(date))%>%
+    select(symbol,date, close, ma_50, ma_200) # select the date and the max 
 
   # bind results
   df_comp_results <- rbind(df_comp_results, df_comp)   # all rows per symbol  
@@ -327,3 +341,12 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-10-07. 5 stocks above dc. KO is out.
 2022-10-23. 4 stocks above dc. AMGN is out.
 2022-10-27. 5 stocks above dc. AMGN is in again after ath.
+
+2022-11-05. Using broader "DOWGLOBAL" w 156 stocks. 12 stocks above dc. 5 stocks from DOW small.
+
+```{r}
+# check the selected stocks
+index_info %>%
+  filter(symbol %in% (df_results$symbol))
+```
+
