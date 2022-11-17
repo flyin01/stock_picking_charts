@@ -208,6 +208,7 @@ for (i in unique(index_info$symbol)) {
              to = today)
     }, warning = function(w) {
       skip_to_next <<- TRUE
+      #cat(" ",i, " ") # print symbol
       
     }, error = function(e) {
       skip_to_next <<- TRUE
@@ -343,6 +344,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-10-27. 5 stocks above dc. AMGN is in again after ath.
 2022-11-05. Using broader "DOWGLOBAL" w 156 stocks. 12 stocks above dc. 5 stocks from DOW small.
 2022-11-12. Same 12 stocks above dc. Incresing positive movement in some.
+2022-11-17. 13 stocks above dc. GS is in.
 
 ```{r}
 # check the selected stocks
