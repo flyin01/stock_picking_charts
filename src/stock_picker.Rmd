@@ -342,7 +342,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-11-12. Same 12 stocks above dc. Incresing positive movement in some.
 2022-11-17. 13 stocks above dc. GS is in.
 2022-11-29. 16 stocks above dc. HON, NFLX, TRV, WMT is in. NEE is out.
-2022-12-05. 19 stocks above dc. CAT, HWM, IBM are in. +10% general rise last week.
+2022-12-05. 19 stocks above dc. CAT, HWM, IBM are in. +3% DOW rise last month.
+2022-12-11. 23 stocks above dc. AIG, GE, JPM, WFC are in. 
 
 ```{r}
 # check the selected stocks
