@@ -62,7 +62,7 @@ tq_get_options()
 We want to use "stock_prices" argument.
 ```{r}
 # Alt 1. Select specific stock manually!
-df <- tq_get("NFLX", 
+df <- tq_get("MCD", 
        get = "stock.prices",
        from = today - 4*365,
        to = today)
@@ -344,6 +344,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-11-29. 16 stocks above dc. HON, NFLX, TRV, WMT is in. NEE is out.
 2022-12-05. 19 stocks above dc. CAT, HWM, IBM are in. +3% DOW rise last month.
 2022-12-11. 23 stocks above dc. AIG, GE, JPM, WFC are in.
+2022-12-19. 29 stocks above dc. BA, DD, HD, MDLZ, RTX, SPG in.
 
 ```{r}
 # check the selected stocks
