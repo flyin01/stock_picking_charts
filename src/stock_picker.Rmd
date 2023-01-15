@@ -32,8 +32,8 @@ tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
 
 index_list <- tq_index_options()
 # the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
-#x <- 1 # "DOW", 30
-x <- 2 # "DOWGLOBAL", 156
+x <- 1 # "DOW", 30
+#x <- 2 # "DOWGLOBAL", 156
 
 # get quotes one index
 index_info <- tq_index(index_list[x])
@@ -339,13 +339,14 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 ...
 2022-10-27. 5 stocks above dc. AMGN is in again after ath.
 2022-11-05. Using broader "DOWGLOBAL" w 156 stocks. 12 stocks above dc. 5 stocks from DOW small.
-2022-11-12. Same 12 stocks above dc. Incresing positive movement in some.
+2022-11-12. Same 12 stocks above dc. Increasing positive movement in some.
 2022-11-17. 13 stocks above dc. GS is in.
 2022-11-29. 16 stocks above dc. HON, NFLX, TRV, WMT is in. NEE is out.
 2022-12-05. 19 stocks above dc. CAT, HWM, IBM are in. +3% DOW rise last month.
 2022-12-11. 23 stocks above dc. AIG, GE, JPM, WFC are in.
 2022-12-19. 29 stocks above dc. BA, DD, HD, MDLZ, RTX, SPG in.
 2022-12-31. 35 stocks above dc. BAC, CSCO, JNJ, NEE, V, WMB in.
+2023-01-15. 20 stocks above dc. KO, NKE, PG. Switched back to DOW 30 frowm DOW GLOBAL
 
 ```{r}
 # check the selected stocks
