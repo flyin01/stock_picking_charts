@@ -346,7 +346,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-12-11. 23 stocks above dc. AIG, GE, JPM, WFC are in.
 2022-12-19. 29 stocks above dc. BA, DD, HD, MDLZ, RTX, SPG in.
 2022-12-31. 35 stocks above dc. BAC, CSCO, JNJ, NEE, V, WMB in.
-2023-01-15. 20 stocks above dc. KO, NKE, PG. Switched back to DOW 30 frowm DOW GLOBAL
+2023-01-15. 20 stocks above dc. KO, NKE, PG. Switched back to DOW 30 frow DOW GLOBAL
+2023-01-26. 21 stocks above dc. WBA in.
 
 ```{r}
 # check the selected stocks
