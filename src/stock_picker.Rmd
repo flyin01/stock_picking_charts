@@ -190,39 +190,38 @@ df_results <- data.frame("symbol" = as.character(),
                          "ma_50"  = as.numeric(),
                          "ma_200" = as.numeric())
 
+## Initialize a vector to store symbols that generate warnings
+warning_symbols <- c()
+
 # loop over each stock in the index_info
 for (i in unique(index_info$symbol)) {
   
-  # check if the symbol data is in cache
-  if (file.exists(paste0(i, ".rds"))) {
-    # load the symbol data from cache
-    df <- readRDS(paste0(i, ".rds"))
-  } else {
-    ## Data collection step fails sometimes, skip symbol if it generates warning/error while fetching data
-    skip_to_next <- FALSE
-    
-    tryCatch(
-      # segment the data
-      {df <- index_info %>%
-        filter(symbol == i) %>%
-        select(symbol) %>%
-        head(1) %>% 
-        tq_get(get = "stock.prices",
-               from = today - 3*365,
-               to = today)
-      }, warning = function(w) {
-        skip_to_next <<- TRUE
-        #cat(" ",i, " ") # print symbol
-        
-      }, error = function(e) {
-        skip_to_next <<- TRUE
-        })
-    
-    if(skip_to_next) { next }
-    
-    # save the symbol data to cache in folder /src/*.rds. This is not relevant for chaning stock data!
-    saveRDS(df, paste0(i, ".rds"))
-    }
+  ## Data collection step fails sometimes, skip symbol if it generates warning/error while fetching data
+  skip_to_next <- FALSE
+  error_vec <- as.vector(c())
+  
+  tryCatch(
+    # segment the data
+    {df <- index_info %>%
+      filter(symbol == i) %>%
+      select(symbol) %>%
+      head(1) %>% 
+      tq_get(get = "stock.prices",
+             from = today - 3*365,
+             to = today)
+    }, warning = function(w) {
+      
+      skip_to_next <<- TRUE
+      warning_symbols <<- c(warning_symbols, i) # add the symbol to the warning symbols vector
+      #cat(" ",i, " ") # print symbol
+      cat("Warning: Error in data collection for symbol", i, "\n") # print warning
+      
+    }, error = function(e) {
+      skip_to_next <<- TRUE
+      cat("Error: Data collection failed for symbol", i, "\n") # print error
+      })
+  
+  if(skip_to_next) { error_vec <<- append(error_vec, i) ; next }
 
   ## calculate moving averages
 
@@ -277,6 +276,9 @@ rm(symbol_col,date_col,roll_50,roll_200,df_comp,df_comp_summary)
 
 # store the df locally
 #write.csv2(df_comp, file="df_comp.csv")
+cat("Number of symbols in total",nrow(index_info[1]),"\n")
+cat("Number of symbols with Warning",length(warning_symbols),"\n")
+rm(warning_symbols)
 ```
 
 Create plots
@@ -356,7 +358,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2022-12-31. 35 stocks above dc. BAC, CSCO, JNJ, NEE, V, WMB in.
 2023-01-15. 20 stocks above dc. KO, NKE, PG. Switched back to DOW 30 frow DOW GLOBAL
 2023-01-26. 21 stocks above dc. WBA in.
-2023-02-03. 20 stocks above dc. AXP in. UNH, WBA out. Date was biggest stock increase YTD in OMXS. 
+2023-02-03. 20 stocks above dc (47 from DOW GLOBAL). AXP in. UNH, WBA out. Date was biggest stock increase YTD in OMXS. 
 
 ```{r}
 # check the selected stocks
