@@ -192,29 +192,37 @@ df_results <- data.frame("symbol" = as.character(),
 
 # loop over each stock in the index_info
 for (i in unique(index_info$symbol)) {
-  # segment the data
   
-  ## Data collection step fails sometimes, skip symbol if it generates warning/error while fetching data
-  skip_to_next <- FALSE
-  
-  tryCatch(
-    # segment the data
-    {df <- index_info %>%
-      filter(symbol == i) %>%
-      select(symbol) %>%
-      head(1) %>% 
-      tq_get(get = "stock.prices",
-             from = today - 3*365,
-             to = today)
-    }, warning = function(w) {
-      skip_to_next <<- TRUE
-      #cat(" ",i, " ") # print symbol
-      
-    }, error = function(e) {
-      skip_to_next <<- TRUE
-      })
-  
-  if(skip_to_next) { next }
+  # check if the symbol data is in cache
+  if (file.exists(paste0(i, ".rds"))) {
+    # load the symbol data from cache
+    df <- readRDS(paste0(i, ".rds"))
+  } else {
+    ## Data collection step fails sometimes, skip symbol if it generates warning/error while fetching data
+    skip_to_next <- FALSE
+    
+    tryCatch(
+      # segment the data
+      {df <- index_info %>%
+        filter(symbol == i) %>%
+        select(symbol) %>%
+        head(1) %>% 
+        tq_get(get = "stock.prices",
+               from = today - 3*365,
+               to = today)
+      }, warning = function(w) {
+        skip_to_next <<- TRUE
+        #cat(" ",i, " ") # print symbol
+        
+      }, error = function(e) {
+        skip_to_next <<- TRUE
+        })
+    
+    if(skip_to_next) { next }
+    
+    # save the symbol data to cache in folder /src/*.rds. This is not relevant for chaning stock data!
+    saveRDS(df, paste0(i, ".rds"))
+    }
 
   ## calculate moving averages
 
