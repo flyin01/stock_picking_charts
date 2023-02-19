@@ -359,7 +359,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2023-01-15. 20 stocks above dc. KO, NKE, PG. Switched back to DOW 30 frow DOW GLOBAL
 2023-01-26. 21 stocks above dc. WBA in.
 2023-02-03. 20 stocks above dc (47 from DOW GLOBAL). AXP in. UNH, WBA out. Date was biggest stock increase YTD in OMXS. 
-2023-02-12. 21 stocks above dc. DOW in, 
+2023-02-12. 21 stocks above dc. DOW in.
+2023-02-19. 20 stocks above dc. JPM out.
 
 ```{r}
 # check the selected stocks
