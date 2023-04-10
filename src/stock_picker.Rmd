@@ -62,7 +62,7 @@ tq_get_options()
 We want to use "stock_prices" argument.
 ```{r}
 # Alt 1. Select specific stock manually!
-df <- tq_get("TSLA", 
+df <- tq_get("MSFT", 
        get = "stock.prices",
        from = today - 4*365,
        to = today)
@@ -365,6 +365,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2023-03-12. 19 stocks above dc. AMGN out. DIS in. 
 2023-03-19. 18 stocks above dc. CRM in. GS, IBM out. 
 2023-03-26. 20 stocks above dc. AAPL, GS, MSFT in. PG out. MSFT revealed gpt4 powered Office 365 copilot and github copilot x.
+2023-04-10. 20 stocks above dc. Same status as previous update.
 
 ```{r}
 # check the selected stocks
