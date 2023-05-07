@@ -17,9 +17,17 @@ mtcars %>%
   ggplot2::geom_point()
 
 
-# fit model
+# fit bayesian stan model
 stan_model <- rstanarm::stan_glm(mpg ~ hp,
                                  data = mtcars)
 
 # inspect model
-broom.mixed::tidy(stan_model)
+df_stan <- data.frame(broom.mixed::tidy(stan_model))
+
+
+# fit lm model
+lm_model <- lm(mpg ~ hp,
+               data = mtcars)
+
+# inspect model
+df_lm <- data.frame(broom.mixed::tidy(lm_model))
