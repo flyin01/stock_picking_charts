@@ -11,6 +11,12 @@ data(mtcars)
 mtcars %>%
   dplyr::glimpse()
 
+# plot hp vs mpg
+mtcars %>%
+  ggplot2::ggplot(aes(x=hp, y=mpg)) +
+  ggplot2::geom_point()
+
+
 # fit model
 stan_model <- rstanarm::stan_glm(mpg ~ hp,
                                  data = mtcars)
