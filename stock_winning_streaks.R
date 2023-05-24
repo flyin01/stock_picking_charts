@@ -3,7 +3,7 @@ library(tidyverse)
 library(timetk)
 library(tidyquant)
 
-stock_name<-"MCD"
+stock_name<-"TSLA"
 
 mcd_stock_price <- tidyquant::tq_get(stock_name)
 
