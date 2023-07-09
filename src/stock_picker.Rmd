@@ -377,4 +377,66 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 index_info %>%
   filter(symbol %in% (df_results$symbol))
 ```
+```{r}
+# Adding Shiny app
+library(shiny)
+
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      checkboxGroupInput("symbols", "Select symbols to plot:", 
+                         choices = unique(df_results$symbol),
+                         selected = unique(df_results$symbol)) # Default selection all symbols
+    ),
+    mainPanel(
+      plotOutput("plot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$plot <- renderPlot({
+    # Filter df_comp_results to only include rows where the symbol column value is present in df_results$symbol and selected by the user
+    df_plot <- df_comp_results %>%
+      filter(symbol %in% input$symbols)
+    
+    # Set start, break, and end date for the plot
+    date_breaks <- as.Date(min(df$date)) + (0:3)*365
+    date_breaks <- c(date_breaks, as.Date(max(df$date)) )
+    
+    # # Check if df is empty
+    # if (nrow(df) > 0) {
+    #   # Set start, break, and end date for the plot
+    #   date_breaks <- as.Date(min(df$date)) + (0:3)*365 
+    #   date_breaks <- c(date_breaks, as.Date(max(df$date)) )
+    # } else {
+    #   # Set date_breaks to an empty vector
+    #   date_breaks <- c()
+    # }
+    
+    # Create the plot
+    df_plot %>%
+      ggplot(aes(x = date, y = close, group = 1, col = "close")) +
+      geom_line() +
+      geom_line(data = df_plot, aes(x = date,
+                                    y = ma_50,
+                                    group = 1,
+                                    col = "ma_50")) +
+      geom_line(data = df_plot, aes(x = date,
+                                    y = ma_200,
+                                    group = 1,
+                                    col = "ma_200")) +
+      scale_x_date(breaks = date_breaks) +
+      ggtitle(paste("By stock symbol the close, ma_200, ma_50", " from", 
+                    date_breaks[1], " to ", 
+                    date_breaks[length(date_breaks)])) +
+      xlab("date") +
+      theme(axis.text.x = element_text(size=8.5)) +
+      facet_wrap(~symbol, scales = "free")
+  })
+}
+
+shinyApp(ui, server)
+
+```
 
