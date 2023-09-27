@@ -377,6 +377,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2023-08-26. 16 stocks above dc. No change.
 2023-09-07. 17 stocks above dc. DOW in.
 2023-09-17. 18 stocks above dc. AMGN in. 
+2023-09-27. 17 stocks above dc. AXP, DOW out. UNH in.
 
 ```{r}
 # check the selected stocks
