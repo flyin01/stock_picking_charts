@@ -1,0 +1,21 @@
+# Run: conda env create -f price_opt_env.yaml
+
+name: price_optimization_py
+channels:
+ - defaults
+dependencies:
+ - python=3.9
+ - pandas
+ - scikit-learn
+ - statsmodels
+ - xgboost
+ - maplotlib
+ - ipykernel
+ - nbformat
+ - pip
+ - pip:
+     - pygam
+     - plotnine
+     - pycaret
+     # Dev version of pytimetk
+     - git+https//github.com/business-science/pytimetk.git
