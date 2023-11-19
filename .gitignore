@@ -4,5 +4,6 @@
 .Ruserdata
 .html
 .gitignore
+.nb.html
 src/*.nb.html
 src/*.csv
