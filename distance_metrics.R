@@ -69,3 +69,31 @@ ggplot(df2, aes(x = X, y = X)) +
   lims(x = c(-20,20), y = c(-20, 20))
 
 
+## scaling
+
+# Create data with 3 observations on different scales
+df3 <- data.frame(Height_meters = as.numeric(c(1.85, 1.68, 1.77)),
+                  Weight_kg     = as.numeric(c(76, 65, 71))
+                  )
+
+# Plot
+ggplot(df3, aes(x = Height_meters, y = Weight_kg)) + 
+  geom_point()
+
+# distance calculations unslaced data
+result3 <- dist(df3, method = "euclidean")
+result3
+
+
+# distance calculations with built in scale(). Subtracts the mean and divides by st_dev.
+df3_scaled <- data.frame(scale(df3))
+df3_scaled
+
+# Plot scaled, only changes the scale on the axes
+ggplot(df3_scaled, aes(x = Height_meters, y = Weight_kg)) + 
+  geom_point()
+
+result3_scaled <- dist(df3_scaled, method = "euclidean")
+result3_scaled
+
+# scaling is important before applying dist()
