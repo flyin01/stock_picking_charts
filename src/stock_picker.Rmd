@@ -61,8 +61,8 @@ tq_get_options()
 ```
 We want to use "stock_prices" argument.
 ```{r}
-# Alt 1. Select specific stock manually!
-df <- tq_get("TSLA", 
+# Alt 1. Select specific stock manually! E.g "TSLA" or "DJI" for DOW index
+df <- tq_get("DJI", 
        get = "stock.prices",
        from = today - 4*365,
        to = today)
@@ -158,8 +158,8 @@ ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
                            col = "ma_200")) +
   scale_x_date(breaks = breaks) +
   ggtitle(paste(df[1,1], names(df)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
-  xlab("date") #+
-  #theme_minimal() +
+  xlab("date") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
   #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
 ```
 
@@ -389,6 +389,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-01-07. 20 stocks above dc. DIS, HON in.
 2024-01-28. 24 stocks above dc. DOW, MCD, MMM, MRK in.
 2024-02-04. 24 stocks above dc. Same status as previous update.
+2024-02-09. 24 stocks above dc. No change.
 
 ```{r}
 # check the selected stocks
