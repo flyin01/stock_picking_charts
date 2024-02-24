@@ -24,7 +24,7 @@ ggplot(df, aes(x = X, y = X)) +
 
 ## Alt 1
 # Manually calculate the distance
-distance <- sqrt( ( df[1,1] - df[2,1])^2 + (df[1,2] - df[2,2])^2 )
+distance <- sqrt( (df[1,1] - df[2,1])^2 + (df[1,2] - df[2,2])^2 )
 distance
 
 
@@ -48,7 +48,7 @@ cat("The Eucledian distance is:", result)
 ## Alt 3
 # Use R built in function dist()
 
-result <- dist(df, method = "euclidean")
+result <- stats::dist(df, method = "euclidean")
 result
 
 
@@ -85,13 +85,14 @@ result3 <- dist(df3, method = "euclidean")
 result3
 
 
-# distance calculations with built in scale(). Subtracts the mean and divides by st_dev.
+# distance calculations with built in scale(). Subtracts the mean and divides by st_dev (standardization).
 df3_scaled <- data.frame(scale(df3))
 df3_scaled
 
 # Plot scaled, only changes the scale on the axes
 ggplot(df3_scaled, aes(x = Height_meters, y = Weight_kg)) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Values on X and Y axis are standardized")
 
 result3_scaled <- dist(df3_scaled, method = "euclidean")
 result3_scaled
