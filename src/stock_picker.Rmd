@@ -16,6 +16,7 @@ Loading required packages
 
 ```{r, message=TRUE}
 library(tidyquant) # for pulling stock quotes with tq_get()
+library(quantmod)  # for pulling DJI index. tidyquants version is incomplete
 library(zoo)       # for calculating rolling mean with rollmean()
 library(tidyverse) # for plotting
 # Documentation:
@@ -33,7 +34,7 @@ tq_index_options() # DOW, DOWGLOBAL, SP400, SP500, SP600
 index_list <- tq_index_options()
 # the first exchange in the list e.g 1 = "DOW" or 4 = "SP500" (too many to plot in one session)
 x <- 1 # "DOW", 30
-# x <- 2 # "DOWGLOBAL", 156
+#x <- 2 # "DOWGLOBAL", 156
 
 # get quotes one index
 index_info <- tq_index(index_list[x])
@@ -62,13 +63,37 @@ tq_get_options()
 We want to use "stock_prices" argument.
 ```{r}
 # Alt 1. Select specific stock manually! E.g "TSLA" or "DJI" for DOW index
-df <- tq_get("DJI", 
+df <- tq_get("DJI", # From DOWGLOBAL "ABBV" 
        get = "stock.prices",
        from = today - 4*365,
        to = today)
 
 head(df)
 ```
+
+Switch source to get complete DJI data
+```{r}
+# Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
+symbol <- "^DJI"
+#getSymbols(symbol, from = "2014-01-01", to = today)
+getSymbols(symbol, from = today - 4*365, to = today)
+
+#df <- as.data.frame(DJI)
+df <- data.frame(date = index(DJI), coredata(DJI))
+
+# Set colnames similar to tidyquant
+new_colnames <- c("date","open","high","low","close","volume","adjusted")
+colnames(df) <- new_colnames
+df["symbol"] <- symbol
+
+# rearrange columns
+df <- df %>% dplyr::select("symbol","date","open","high","low","close","volume","adjusted")
+
+# Print the first few rows of the data
+head(df)
+```
+
+
 
 Repeat using tidyverse.
 ```{r}
@@ -389,6 +414,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-02-09. 24 stocks above dc. No change.
 2024-02-15. 25 stocks above dc. KO in.
 2024-02-24. 26 stocks above dc. PG in. Increased in MCD.
+2024-03-03. 26 stocks above dc. AMZN in. NKE out.
 
 ```{r}
 # check the selected stocks
