@@ -415,6 +415,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-02-15. 25 stocks above dc. KO in.
 2024-02-24. 26 stocks above dc. PG in. Increased in MCD.
 2024-03-03. 26 stocks above dc. AMZN in. NKE out.
+2024-03-10. 24 stocks above dc. BA, MMM out.
 
 ```{r}
 # check the selected stocks
