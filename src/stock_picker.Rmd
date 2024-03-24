@@ -71,15 +71,22 @@ df <- tq_get("DJI", # From DOWGLOBAL "ABBV"
 head(df)
 ```
 
-Switch source to get complete DJI data
+Switch source to get complete DJI data or VIX data
 ```{r}
 # Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
+
+# Define the symbol as a parameter
 symbol <- "^DJI"
-#getSymbols(symbol, from = "2014-01-01", to = today)
+# symbol <- "^VIX"
+
+# Fetch historical data for the specified symbol
 getSymbols(symbol, from = today - 4*365, to = today)
 
-#df <- as.data.frame(DJI)
-df <- data.frame(date = index(DJI), coredata(DJI))
+# Create a reference to the data object
+data_obj <- get(gsub("\\^", "", symbol))
+
+# Create the data frame
+df <- data.frame(date = index(data_obj), coredata(data_obj))
 
 # Set colnames similar to tidyquant
 new_colnames <- c("date","open","high","low","close","volume","adjusted")
@@ -91,6 +98,7 @@ df <- df %>% dplyr::select("symbol","date","open","high","low","close","volume",
 
 # Print the first few rows of the data
 head(df)
+
 ```
 
 
@@ -98,13 +106,13 @@ head(df)
 Repeat using tidyverse.
 ```{r}
 # Alt 2.
-df <- index_info %>%
-  select(symbol) %>%
-  head(1) %>% # Take the first symbol for now
-  tq_get(get = "stock.prices", 
-         from = today - 4*365,
-         to = today)
-df
+# df <- index_info %>%
+#   select(symbol) %>%
+#   head(1) %>% # Take the first symbol for now
+#   tq_get(get = "stock.prices", 
+#          from = today - 4*365,
+#          to = today)
+# df
 ```
 
 Now we want to create the criteria of selection.
@@ -417,6 +425,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-03-03. 26 stocks above dc. AMZN in. NKE out.
 2024-03-08. 24 stocks above dc. BA, MMM out.
 2024-03-17. 24 stocks above dc. JNJ in. AAPL out.
+2024-03-22. 22 stocks above dc. JNJ, UNH out. DJI at ath, VIX extremely low.
 
 ```{r}
 # check the selected stocks
