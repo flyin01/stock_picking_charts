@@ -76,8 +76,8 @@ Switch source to get complete DJI data or VIX data
 # Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
 
 # Define the symbol as a parameter
-symbol <- "^DJI"
-# symbol <- "^VIX"
+# symbol <- "^DJI"
+symbol <- "^VIX"
 
 # Fetch historical data for the specified symbol
 getSymbols(symbol, from = today - 4*365, to = today)
@@ -99,6 +99,23 @@ df <- df %>% dplyr::select("symbol","date","open","high","low","close","volume",
 # Print the first few rows of the data
 head(df)
 
+```
+Check data for NA values
+```{r}
+# Check nbr of rows before cleaning
+print(dim(df)[1])
+      
+na_close_cnt <- sum(is.na(df$close))
+print(paste("Nbr of rows in df with col 'close' NA:", na_close_cnt))
+
+if (na_close_cnt > 0) {
+  df_clean <- na.omit(df)
+  # reassign df to df_clean
+  df <- df_clean
+}
+
+# Check nbr of rows after cleaning
+print(dim(df)[1])
 ```
 
 
@@ -426,6 +443,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-03-08. 24 stocks above dc. BA, MMM out.
 2024-03-17. 24 stocks above dc. JNJ in. AAPL out.
 2024-03-22. 22 stocks above dc. JNJ, UNH out. DJI at ath, VIX extremely low.
+2024-04-05. 22 stocks above dc. Same status as previous update. VIX is up.
 
 ```{r}
 # check the selected stocks
