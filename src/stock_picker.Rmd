@@ -48,12 +48,14 @@ Plot the weights of company on index - Out of curiosity mostly
 #fig.width=12, fig.height=14
 index_info %>%
   #arrange(-weight) %>%
-  head(30) %>% # top 50 
+  head(35) %>% # top 50 
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
   coord_flip() +
-  xlab("Company Name")
+  xlab("Company Name") +
+  ggtitle("Company List")
 ```
+Comment: US DOLLAR and SOLVENTUM CORP are to be excluded. Evaluate Company List continuously to exclude/include companies!
 
 Next, get stock info for one company from the tibble and examine the results.
 ```{r}
@@ -76,8 +78,8 @@ Switch source to get complete DJI data or VIX data
 # Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
 
 # Define the symbol as a parameter
-# symbol <- "^DJI"
-symbol <- "^VIX"
+symbol <- "^DJI"
+# symbol <- "^VIX"
 
 # Fetch historical data for the specified symbol
 getSymbols(symbol, from = today - 4*365, to = today)
@@ -331,6 +333,24 @@ cat("Number of symbols in total",nrow(index_info[1]),"\n")
 cat("Number of symbols with Warning",length(warning_symbols),"\n")
 rm(warning_symbols)
 ```
+Exclude US Dollar (-) and (SOLV) based on Company List plot above.
+```{r}
+# Print nbr of unique symbols before exclusion
+print(length(unique(df_results$symbol)) )
+
+# Symbols to exclude
+symbol_exclude <- c("-","SOLV")
+
+# Check if symbols are included in the df_results and replace them
+if(any(df_results$symbol %in% symbol_exclude)) {
+  df_results <- df_results %>%
+    filter(!symbol %in% symbol_exclude)
+}
+
+# Print nbr of unique symbols after exclusion
+print(length(unique(df_results$symbol)) )
+```
+
 
 Create plots
 ```{r}
@@ -458,7 +478,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       checkboxGroupInput("symbols", "Select symbols to plot:", 
-                         choices = unique(df_results$symbol),
+                         choices = sort(unique(df_results$symbol)),
                          selected = unique(df_results$symbol)) # Default selection all symbols
     ),
     mainPanel(
@@ -474,10 +494,10 @@ server <- function(input, output) {
       filter(symbol %in% input$symbols)
     
     # Set start, break, and end date for the plot
-    date_breaks <- as.Date(min(df$date)) + (0:3)*365
+    date_breaks <- as.Date(min(df_comp_results$date)) + (0:3)*365
     date_breaks <- c(date_breaks, as.Date(max(df$date)) )
-    
-    # # Check if df is empty
+    # 
+    # # # Check if df is empty
     # if (nrow(df) > 0) {
     #   # Set start, break, and end date for the plot
     #   date_breaks <- as.Date(min(df$date)) + (0:3)*365 
