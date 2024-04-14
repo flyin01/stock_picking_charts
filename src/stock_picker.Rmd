@@ -55,7 +55,8 @@ index_info %>%
   xlab("Company Name") +
   ggtitle("Company List")
 ```
-Comment: US DOLLAR and SOLVENTUM CORP are to be excluded. Evaluate Company List continuously to exclude/include companies!
+Comment: Evaluate Company List plot during each update for potential companies to excluded.
+Company names to exclude: US DOLLAR and SOLVENTUM CORP. Assigned below to variable symbol_exclude.
 
 Next, get stock info for one company from the tibble and examine the results.
 ```{r}
@@ -78,8 +79,8 @@ Switch source to get complete DJI data or VIX data
 # Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
 
 # Define the symbol as a parameter
-symbol <- "^DJI"
-# symbol <- "^VIX"
+# symbol <- "^DJI"
+symbol <- "^VIX"
 
 # Fetch historical data for the specified symbol
 getSymbols(symbol, from = today - 4*365, to = today)
@@ -463,7 +464,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-03-08. 24 stocks above dc. BA, MMM out.
 2024-03-17. 24 stocks above dc. JNJ in. AAPL out.
 2024-03-22. 22 stocks above dc. JNJ, UNH out. DJI at ath, VIX extremely low.
-2024-04-05. 22 stocks above dc. Same status as previous update. VIX is up.
+2024-04-05. 22 stocks above dc. Same status as previous update. VIX is up. Increased in MCD.
+2024-04-12. 22 stocks above dc. same status. VIX is up. Iran bombed Israel on 2024-04-13.
 
 ```{r}
 # check the selected stocks
