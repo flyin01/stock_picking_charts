@@ -466,6 +466,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-03-22. 22 stocks above dc. JNJ, UNH out. DJI at ath, VIX extremely low.
 2024-04-05. 22 stocks above dc. Same status as previous update. VIX is up. Increased in MCD.
 2024-04-12. 22 stocks above dc. same status. VIX is up. Iran bombed Israel on 2024-04-13.
+2024-04-19. 24 stocks above dc. CVX, MMM in. DJI is down. VIX is up. Irand did not respond again. Increase in Meta.
 
 ```{r}
 # check the selected stocks
