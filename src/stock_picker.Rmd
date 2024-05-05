@@ -14,7 +14,7 @@ Loading required packages
 
 ### Tidyquant and other
 
-```{r, message=TRUE}
+```{r, message=FALSE}
 library(tidyquant) # for pulling stock quotes with tq_get()
 library(quantmod)  # for pulling DJI index. tidyquants version is incomplete
 library(zoo)       # for calculating rolling mean with rollmean()
@@ -465,14 +465,16 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-03-17. 24 stocks above dc. JNJ in. AAPL out.
 2024-03-22. 22 stocks above dc. JNJ, UNH out. DJI at ath, VIX extremely low.
 2024-04-05. 22 stocks above dc. Same status as previous update. VIX is up. Increased in MCD.
-2024-04-12. 22 stocks above dc. same status. VIX is up. Iran bombed Israel on 2024-04-13.
+2024-04-12. 22 stocks above dc. same status. VIX is up. Iran bombed Israel on 2024-04-13. Exit DIS.
 2024-04-19. 24 stocks above dc. CVX, MMM in. DJI is down. VIX is up. Iran did not respond again. Increased in Meta.
 2024-04-26. 26 stocks above dc. Same status. VIX down to 10.
+2024-05-03. 22 stocks above dc. INTC, MCD out. DJI is up. VIX down to 7. Into HD.
 
 ```{r}
 # check the selected stocks
 index_info %>%
-  filter(symbol %in% (df_results$symbol))
+  dplyr::filter(symbol %in% (df_results$symbol)) %>%
+  dplyr::arrange(symbol)
 ```
 ```{r}
 # Adding Shiny app
