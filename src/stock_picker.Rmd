@@ -79,8 +79,8 @@ Switch source to get complete DJI data or VIX data
 # Fetch historical data for the DJIA index using quantmod due to incmplete series for DJI in tidyquant
 
 # Define the symbol as a parameter
-symbol <- "^DJI"
-# symbol <- "^VIX"
+# symbol <- "^DJI"
+symbol <- "^VIX"
 
 # Fetch historical data for the specified symbol
 getSymbols(symbol, from = today - 4*365, to = today)
@@ -470,7 +470,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-04-26. 26 stocks above dc. Same status. VIX down to 14.
 2024-05-03. 22 stocks above dc. INTC, MCD out. DJI is up. VIX down to 7. Into HD.
 2024-05-14. 22 stocks above dc. Same status. VIX is down. DJI is up.
-2024-05-24. 22 stocks above dc. Same status as previous update. DJI is up to 39069, VIX down 12.
+2024-05-24. 22 stocks above dc. Same status. DJI is up to 39069, VIX down 12.
+2024-06-09. 22 stocks above dc. Same status. DJI is down to 38798, VIX is same at 12.
 
 ```{r}
 # check the selected stocks
