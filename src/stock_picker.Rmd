@@ -146,23 +146,23 @@ Calculate and compare MA200 and MA50
 ```{r}
 # select symbol
 symbol_col <- df %>%
-  select(symbol)
+  dplyr::select(symbol)
 
 # select date
 date_col <- df %>%
-  select(date)
+  dplyr::select(date)
 
 # calculate rolling 50
 roll_50 <- df %>%
-  select(close) %>%
-  rollmean(50,
+  dplyr::select(close) %>%
+  zoo::rollmean(50,
            fill = NA,
            align = "right")
 
 # calculate rolling 200
 roll_200 <- df %>%
-  select(close) %>%
-  rollmean(200,
+  dplyr::select(close) %>%
+  zoo::rollmean(200,
            fill = NA,
            align = "right")
 
@@ -180,9 +180,9 @@ df_comp %>%
 
 # check logic if ma_50 >= ma_200
 df_comp %>%
-  filter(ma_50 >= ma_200,
+  dplyr::filter(ma_50 >= ma_200,
          date == max(date))%>%
-  select(symbol,date, ma_50, ma_200) # select the date and the max 
+  dplyr::select(symbol,date, ma_50, ma_200) # select the date and the max 
 ```
 
 These are the stocks that we want to plot then.
@@ -258,10 +258,10 @@ for (i in unique(index_info$symbol)) {
   tryCatch(
     # segment the data
     {df <- index_info %>%
-      filter(symbol == i) %>%
-      select(symbol) %>%
+      dplyr::filter(symbol == i) %>%
+      dplyr::select(symbol) %>%
       head(1) %>% 
-      tq_get(get = "stock.prices",
+      tidyquant::tq_get(get = "stock.prices",
              from = today - 3*365,
              to = today)
     }, warning = function(w) {
@@ -282,27 +282,27 @@ for (i in unique(index_info$symbol)) {
 
   # select symbol
   symbol_col <- df %>%
-    select(symbol)
+    dplyr::select(symbol)
 
   # select date
   date_col <- df %>%
-    select(date)
+    dplyr::select(date)
   
   # select close
   close <- df %>%
-    select(close)
+    dplyr::select(close)
 
   # calculate rolling 50
   roll_50 <- df %>%
-    select(close) %>%
-    rollmean(50,
+    dplyr::select(close) %>%
+    zoo::rollmean(50,
              fill = NA,
              align = "right")
 
   # calculate rolling 200
   roll_200 <- df %>%
-    select(close) %>%
-    rollmean(200,
+    dplyr::select(close) %>%
+    zoo::rollmean(200,
              fill = NA,
              align = "right")
 
@@ -317,9 +317,9 @@ for (i in unique(index_info$symbol)) {
 
   # check logic if ma_50 >= ma_200
   df_comp_summary <- df_comp %>% 
-    filter(ma_50 >= ma_200,
+    dplyr::filter(ma_50 >= ma_200,
            date == max(date))%>%
-    select(symbol,date, close, ma_50, ma_200) # select the date and the max 
+    dplyr::select(symbol,date, close, ma_50, ma_200) # select the date and the max 
 
   # bind results
   df_comp_results <- rbind(df_comp_results, df_comp)   # all rows per symbol  
@@ -346,7 +346,7 @@ symbol_exclude <- c("-","SOLV")
 # Check if symbols are included in the df_results and replace them
 if(any(df_results$symbol %in% symbol_exclude)) {
   df_results <- df_results %>%
-    filter(!symbol %in% symbol_exclude)
+    dplyr::filter(!symbol %in% symbol_exclude)
 }
 
 # Print nbr of unique symbols after exclusion
@@ -360,7 +360,7 @@ Create plots
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
-  filter(symbol %in% unique(df_results$symbol))
+  dplyr::filter(symbol %in% unique(df_results$symbol))
 
 # set start, break and end date for the plot
 breaks <- as.Date(min(df$date)) + (0:3)*365 
@@ -390,7 +390,7 @@ df_plot %>%
 
 # plot only the symbols that are in the df_results
 df_plot <- df_comp_results %>%
-  filter(symbol %in% unique(df_results$symbol))
+  dplyr::filter(symbol %in% unique(df_results$symbol))
 
 # set start, break and end date for the plot
 breaks <- as.Date(min(df$date)) + (0:3)*365 
@@ -481,6 +481,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-08-30. 20 stocks above dc. JNJ in. DJI is up 41563, VIX down 15.
 2024-09-13. 19 stocks above dc. MRK is out. DJI is down 41393, VIX up 17. tidyquant lib update needed.
 2024-09-27. 21 stocks above dc. CSCO, MCD in. DJI is up 42175, VIX down 15.
+2024-10-13. 22 stocks above dc. V is in. DJI is up 42863, VIX up 20.
 
 ```{r}
 # check the selected stocks
@@ -509,7 +510,7 @@ server <- function(input, output) {
   output$plot <- renderPlot({
     # Filter df_comp_results to only include rows where the symbol column value is present in df_results$symbol and selected by the user
     df_plot <- df_comp_results %>%
-      filter(symbol %in% input$symbols)
+      dplyr::filter(symbol %in% input$symbols)
     
     # Set start, break, and end date for the plot
     date_breaks <- as.Date(min(df_comp_results$date)) + (0:3)*365
