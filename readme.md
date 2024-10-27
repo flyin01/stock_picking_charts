@@ -1,6 +1,6 @@
 ### stock picking charts ###
 
-Using tidyquant package and tidyverse to plot stock quotes after applying some logic to sort out interesting stock.  
+Using `tidyquant` package and tidyverse to plot stock quotes after applying some logic to sort out interesting stock. Using `quantmod` to `DJI` and `VIX` data.  
 
 #### src ####  
 Contains R files:  
