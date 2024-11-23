@@ -74,35 +74,50 @@ df <- tidyquant::tq_get("DJI", # From DOWGLOBAL "ABBV"
 head(df)
 ```
 
-Switch source to get complete DJI data or VIX data
+Start by checking DJI and VIX index as reference symbols for overall market behavior.
+
 ```{r}
-# Fetch historical data for the DJIA index using quantmod due to incomplete series for DJI in tidyquant
-# Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
+# Fetch historical data for the DJIA index using quantmod due to incomplete series for DJI in tidyquant. Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
 
-# Define the symbol as a parameter
-# symbol <- "^DJI"
-symbol <- "^VIX"
+# Create list if reference symbols for over all market behaviour
+reference_symbols = list("^DJI","^VIX")
 
-# Fetch historical data for the specified symbol
-quantmod::getSymbols(symbol, from = today - 4*365, to = today)
+# Create the empty data frame for historical data
+df <- data.frame(symbol   = character(),
+                 date     = as.Date(character()),
+                 open     = double(),
+                 high     = double(),
+                 low      = double(),
+                 close    = double(),
+                 adjusted = double())
 
-# Create a reference to the data object
-data_obj <- get(gsub("\\^", "", symbol))
+# fetch historical data for each symbol
+for(symbol in reference_symbols) {
+  
+  quantmod::getSymbols(symbol, from = today - 4*365, to = today)
+  
+  # Create a reference to the data object
+  data_obj <- get(gsub("\\^", "", symbol))
 
-# Create the data frame
-df <- data.frame(date = index(data_obj), coredata(data_obj))
+  # Create the data frame
+  df_symbol <- data.frame(date = index(data_obj), coredata(data_obj))
+  
+  # Set colnames similar to tidyquant
+  new_colnames <- c("date","open","high","low","close","volume","adjusted")
+  colnames(df_symbol) <- new_colnames
+  df_symbol["symbol"] <- symbol
+  
+  # rearrange columns
+  df_symbol <- df_symbol %>%
+    dplyr::select("symbol","date","open","high","low","close","volume","adjusted")
+  
+  # bind symbol data frame to result data frame
+  df = rbind(df, df_symbol)
 
-# Set colnames similar to tidyquant
-new_colnames <- c("date","open","high","low","close","volume","adjusted")
-colnames(df) <- new_colnames
-df["symbol"] <- symbol
-
-# rearrange columns
-df <- df %>% dplyr::select("symbol","date","open","high","low","close","volume","adjusted")
-
+}
+  
 # Print the first few rows of the data
 head(df)
-
 ```
 Check data for NA values
 ```{r}
@@ -122,103 +137,65 @@ if (na_close_cnt > 0) {
 print(dim(df)[1])
 ```
 
-
-
-Repeat using tidyverse.
-```{r}
-# Alt 2.
-# df <- index_info %>%
-#   select(symbol) %>%
-#   head(1) %>% # Take the first symbol for now
-#   tq_get(get = "stock.prices", 
-#          from = today - 4*365,
-#          to = today)
-# df
-```
-
-Now we want to create the criteria of selection.
-
-- Calculate and Compare MA200 with MA50
-- If MA50 > MA200 then select the stock
-- Set time period?
-
-Calculate and compare MA200 and MA50
-```{r}
-# select symbol
-symbol_col <- df %>%
-  dplyr::select(symbol)
-
-# select date
-date_col <- df %>%
-  dplyr::select(date)
-
-# calculate rolling 50
-roll_50 <- df %>%
-  dplyr::select(close) %>%
-  zoo::rollmean(50,
-           fill = NA,
-           align = "right")
-
-# calculate rolling 200
-roll_200 <- df %>%
-  dplyr::select(close) %>%
-  zoo::rollmean(200,
-           fill = NA,
-           align = "right")
-
-# Compare the ma 50 and ma 200
-df_comp <- data.frame("symbol"   = symbol_col,
-                      "date"     = date_col,
-                      "ma_50"    = roll_50,
-                      "ma_200"   = roll_200)
-
-names(df_comp) <- c("symbol", "date", "ma_50", "ma_200") 
-
-# check tail
-df_comp %>%
-  tail()
-
-# check logic if ma_50 >= ma_200
-df_comp %>%
-  dplyr::filter(ma_50 >= ma_200,
-         date == max(date))%>%
-  dplyr::select(symbol,date, ma_50, ma_200) # select the date and the max 
-```
-
-These are the stocks that we want to plot then.
-These are potential buy candidates with upside momentum.
-We should add a filtering criteria for this date, only select the symbols that have the date close to today.
-
-Plot the data
+Calculate and compare MA200 and MA50 and plot the data to spot trends.
 ```{r}
 # set start, break and end date for the plot
 breaks <- as.Date(min(df$date)) + (0:3)*365 
 breaks <- c(breaks, as.Date(max(df$date)) )
 
+# slice data frame for symbol 1 for plotting
+df_slice = df %>% 
+  dplyr::filter(symbol == reference_symbols[1])
+
 # create plot
-ggplot(df, aes(x = date, y = close, group = 1, col = "close")) +
+ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
   geom_line() +
-  geom_line(data = df, aes(x = date, 
+  geom_line(data = df_slice, aes(x = date, 
                            y = rollmean(close, 50, 
                                         fill = NA, 
                                         align = "right"), 
                            group = 1, 
                            col = "ma_50")) +
-  geom_line(data = df, aes(x = date, 
+  geom_line(data = df_slice, aes(x = date, 
                            y = rollmean(close, 200, 
                                         fill = NA, 
                                         align = "right"), 
                            group = 1, 
                            col = "ma_200")) +
   scale_x_date(breaks = breaks) +
-  ggtitle(paste(df[1,1], names(df)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
+  ggtitle(paste(df_slice[1,1], names(df_slice)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
+  xlab("date") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+  #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
+
+
+# slice data frame for symbol 2 for plotting
+df_slice = df %>% 
+  dplyr::filter(symbol == reference_symbols[2])
+
+# create plot
+ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df_slice, aes(x = date, 
+                           y = rollmean(close, 50, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_50")) +
+  geom_line(data = df_slice, aes(x = date, 
+                           y = rollmean(close, 200, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_200")) +
+  scale_x_date(breaks = breaks) +
+  ggtitle(paste(df_slice[1,1], names(df_slice)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
   xlab("date") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
   #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
 ```
 
-Next, we loop over the tibble row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. We could add a proper filter to capture date that is closed to today. The rest of the stocks we don´t care about.
-
+Now we can start the analysis on stock symbol level for the selected index.
 
 ### Loop Construct ###
 
@@ -226,7 +203,7 @@ Next, we loop over the tibble row wise for each company and collect stock info. 
 # check unique values in index_info
 lapply(index_info, function(x) {length(unique(x))})
 ```
-
+Next, we collect the symbols from above into a tibble and loop row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. We could add a proper filter to capture date that is closed to today. The rest of the stocks we don´t care about.
 
 ```{r}
 
