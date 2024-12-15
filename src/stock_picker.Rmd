@@ -77,7 +77,7 @@ head(df)
 Start by checking DJI and VIX index as reference symbols for overall market behavior.
 
 ```{r}
-# Fetch historical data for the DJIA index using quantmod due to incomplete series for DJI in tidyquant. Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
+# Fetch historical data for the DJIA and VIX index using quantmod due to incomplete series for DJI in tidyquant. Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
 
 # Create list if reference symbols for over all market behaviour
 reference_symbols = list("^DJI","^VIX")
@@ -462,7 +462,8 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2024-10-25. 22 stocks above dc. Same status. DJI is down 42114, VIX on 20.
 2024-11-08. 24 stocks above dc. CRM, NVDA, SHW in. MSFT out. DJI is up 43989, VIX down 15. Trump won US president election.
 2024-11-22. 25 stocks above dc. MSFT in. DJI up 44296, VIX same 15.
-2024-12-06. 26 stocks above dc. CVX, DIS in, MSFT out.DJI up 44642, VIX down 13.
+2024-12-06. 26 stocks above dc. CVX, DIS in, MSFT out. DJI up 44642, VIX down 13.
+2024-12-15. 26 stocks above dc. AMGN is out, MSFT in. DJI is down 43828,  VIX is up 14.
 
 ```{r}
 # check the selected stocks
