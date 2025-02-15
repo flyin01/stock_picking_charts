@@ -468,6 +468,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2025-01-06. 23 stocks above dc. CVX, JNJ is out. DJI down 42732, VIX down 16.
 2025-01-24. 23 stocks above dc. CVX in, VZ is out. DJI up 44424, VIX down 15.
 2025-01-31. 22 stocks above dc. UNH out. DJI up 44544, VIX up 16.
+2025-02-15. 21 stocks above dc. BA in. CVX, PG out. DJI up 44546, VIX down 15.
 
 ```{r}
 # check the selected stocks
