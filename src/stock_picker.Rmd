@@ -476,6 +476,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2025-04-13. 18 stocks above dc. AAPL, PG is out. DJI surge to 40212, VIX down to 37. Trump pauses US tariffs for 90 days except for CN.
 2025-04-25. 14 stocks above dc. AMZN, AXP, CRM, DIS out. DJI down to 40113, VIX down to 25.
 2025-05-04. 12 stocks above dc. CVX, GS out. DJI up to 41318, VIX down to 23. 
+2025-05-09. 12 stocks above dc. Same status as previous update. DJI down to 41249, VIX down to 22.
 
 ```{r}
 # check the selected stocks
