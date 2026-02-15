@@ -491,6 +491,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2026-01-13. No change. DJI up 49590, VIX unchanged 15.
 2026-02-01. 20 stocks above dc. BA, UNH in. MSFT out. DJI down 48892, VIX up 17.
 2026-02-06. 21 stocks above dc. HON in. DJI up 50116, VIX up 20.
+2026-02-15. 21 stocks above dc. No change. JNJ, MCD ath. DJI down 49500, VIX same 20. 
 
 ```{r}
 # check the selected stocks
