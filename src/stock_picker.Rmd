@@ -7,7 +7,7 @@ The purpose of this file is to use evaluate stocks against some selection criter
 
 Set today´s date as a variable
 ```{r}
-today <- Sys.Date()
+today <- Sys.Date()-1 # Added -1 since sometimes the last day has two entries, this throws and error from "zoo" if dates are not unique
 ```
 
 Loading required packages
@@ -66,10 +66,10 @@ tidyquant::tq_get_options()
 We want to use "stock_prices" argument.
 ```{r}
 # Alt 1. Select specific stock manually! E.g "TSLA" or "DJI" for DOW index
-df <- tidyquant::tq_get("DJI", # From DOWGLOBAL "ABBV" 
+df <- tidyquant::tq_get("TSLA", # From DOWGLOBAL "ABBV" 
        get = "stock.prices",
        from = today - 4*365,
-       to = today)
+       to = today) 
 
 head(df)
 ```
@@ -77,7 +77,8 @@ head(df)
 Start by checking DJI and VIX index as reference symbols for overall market behavior.
 
 ```{r}
-# Fetch historical data for the DJIA and VIX index using quantmod due to incomplete series for DJI in tidyquant. Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
+# Alt 2. Fetch historical data for the DJIA and VIX index using quantmod due to incomplete series for DJI in tidyquant. 
+# Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
 
 # Create list if reference symbols for over all market behaviour
 reference_symbols = list("^DJI","^VIX")
@@ -204,7 +205,6 @@ Now we can start the analysis on stock symbol level for the selected index.
 lapply(index_info, function(x) {length(unique(x))})
 ```
 Next, we collect the symbols from above into a tibble and loop row wise for each company and collect stock info. The stocks that pass the selection criteria, these stocks we want to plot according to above. We could add a proper filter to capture date that is closed to today. The rest of the stocks we don´t care about.
-
 ```{r}
 
 #i <- "HD"
@@ -243,7 +243,7 @@ for (i in unique(index_info$symbol)) {
              to = today)
     }, warning = function(w) {
       
-      skip_to_next <<- TRUE
+      skip_to_next <<- FALSE
       warning_symbols <<- c(warning_symbols, i) # add the symbol to the warning symbols vector
       #cat(" ",i, " ") # print symbol
       cat("Warning: Error in data collection for symbol", i, "\n") # print warning
@@ -488,11 +488,12 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2025-11-30. 20 stocks above dc. Same status. DJI up to 47716, VIX down to 16.
 2025-12-22. 19 stocks above dc. BA, DIS, HD out. KO, MCD in. DJI up to 48134, VIX down to 15.
 2026-01-06. 19 stocks above dc. Same status. DJI up 48977, VIX at 15. Trump captured Maduro.
-2026-01-13. No change. DJI up 49590, VIX unchanged 15.
+2026-01-13. 19 stocks above dc. No change. DJI up 49590, VIX unchanged 15.
 2026-02-01. 20 stocks above dc. BA, UNH in. MSFT out. DJI down 48892, VIX up 17.
 2026-02-06. 21 stocks above dc. HON in. DJI up 50116, VIX up 20.
 2026-02-15. 21 stocks above dc. No change. JNJ, MCD ath. DJI down 49500, VIX same 20.
 2026-02-22. 20 stocks above dc. UNH out. DJI up 49625 VIX down 19.
+2026-03-14. 20 stocks above dc. AMZN, IBM out. SHW, VZ in. DJI down 46677, VIX up 27. Trump attacked Iran in March.
 
 ```{r}
 # check the selected stocks
