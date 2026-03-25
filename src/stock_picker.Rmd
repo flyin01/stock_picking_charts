@@ -8,6 +8,9 @@ The purpose of this file is to use evaluate stocks against some selection criter
 Set today´s date as a variable
 ```{r}
 today <- Sys.Date()-1 # Added -1 since sometimes the last day has two entries, this throws and error from "zoo" if dates are not unique
+
+# Add the value to the vline on the xintercept
+value <- as.Date("2026-02-28") # Date when Trump attacked Iran. Adjust accordingly
 ```
 
 Loading required packages
@@ -166,8 +169,11 @@ ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
   scale_x_date(breaks = breaks) +
   ggtitle(paste(df_slice[1,1], names(df_slice)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
   xlab("date") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-  #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  geom_vline(xintercept = value,
+             color = "brown",
+             linetype = "dashed",
+             linewidth = .25)
 
 
 # slice data frame for symbol 2 for plotting
@@ -192,8 +198,11 @@ ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
   scale_x_date(breaks = breaks) +
   ggtitle(paste(df_slice[1,1], names(df_slice)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
   xlab("date") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-  #geom_vline(xintercept = t, linetype = 2,  color = "brown", alpha = .5)
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  geom_vline(xintercept = value,
+             color = "brown",
+             linetype = "dashed",
+             linewidth = .25)
 ```
 
 Now we can start the analysis on stock symbol level for the selected index.
@@ -358,6 +367,10 @@ df_plot %>%
   ggtitle(paste("By stock symbol the close, ma_200, ma_50"," from", breaks[1]," to ", breaks[length(breaks)]) ) +
   xlab("date") +
   theme(axis.text.x = element_text(size=8.5)) +
+  geom_vline(xintercept = value,
+             color = "brown",
+             linetype = "dashed",
+             linewidth = .25) +
   facet_wrap(~symbol, scales = "free")
 
 ```
