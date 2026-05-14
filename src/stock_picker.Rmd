@@ -50,7 +50,6 @@ Plot the weights of company on index - Out of curiosity mostly
 ```{r}
 #fig.width=12, fig.height=14
 index_info %>%
-  #arrange(-weight) %>%
   head(35) %>% # top 50 
   ggplot(aes(x = reorder(company, weight), y = weight)) +
   geom_col() +
@@ -81,10 +80,10 @@ Start by checking DJI and VIX index as reference symbols for overall market beha
 
 ```{r}
 # Alt 2. Fetch historical data for the DJIA and VIX index using quantmod due to incomplete series for DJI in tidyquant. 
-# Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HFTTP error 401.
+# Versions used tidyquant 1.0.3, quantmod 0.4.20. These stopped working on 2024-09-15 with an HTTP error 401.
 
 # Create list if reference symbols for over all market behaviour
-reference_symbols = list("^DJI","^VIX")
+reference_symbols = list("^DJI","^VIX","^SPX")
 
 # Create the empty data frame for historical data
 df <- data.frame(symbol   = character(),
@@ -179,6 +178,34 @@ ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
 # slice data frame for symbol 2 for plotting
 df_slice = df %>% 
   dplyr::filter(symbol == reference_symbols[2])
+
+# create plot
+ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
+  geom_line() +
+  geom_line(data = df_slice, aes(x = date, 
+                           y = rollmean(close, 50, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_50")) +
+  geom_line(data = df_slice, aes(x = date, 
+                           y = rollmean(close, 200, 
+                                        fill = NA, 
+                                        align = "right"), 
+                           group = 1, 
+                           col = "ma_200")) +
+  scale_x_date(breaks = breaks) +
+  ggtitle(paste(df_slice[1,1], names(df_slice)[6], " from", breaks[1]," to ", breaks[length(breaks)]) ) +
+  xlab("date") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  geom_vline(xintercept = value,
+             color = "brown",
+             linetype = "dashed",
+             linewidth = .25)
+
+# slice data frame for symbol 3 for plotting
+df_slice = df %>% 
+  dplyr::filter(symbol == reference_symbols[3])
 
 # create plot
 ggplot(df_slice, aes(x = date, y = close, group = 1, col = "close")) +
@@ -513,6 +540,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2026-04-19. 17 stocks above dc. No change. DJI is up 49447, VIX down to 17.
 2026-04-26. 15 stocks above dc. BA, PG out. DJI down 49231, VIX up to 19.
 2026-05-03. 15 stocks above dc. Same status. DJI is up 49499, VIX down to 17.
+2026-05-14. 15 stocks above dc. MCD out. AMZN in. DJI up to 49760, VIX up 18.
 
 ```{r}
 # check the selected stocks
