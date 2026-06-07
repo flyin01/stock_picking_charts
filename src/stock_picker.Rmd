@@ -427,6 +427,10 @@ df_plot %>%
   scale_x_date(breaks = breaks) +
   ggtitle(paste("By stock symbol the close, ma_200, ma_50"," from", breaks[1]," to ", breaks[length(breaks)]) ) +
   xlab("date") +
+  geom_vline(xintercept = value,
+           color = "brown",
+           linetype = "dashed",
+           linewidth = .25) +
   theme(axis.text.x = element_text(size=8.5)) +
   facet_wrap(~symbol, scales = "free")
 
@@ -541,6 +545,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2026-04-26. 15 stocks above dc. BA, PG out. DJI down 49231, VIX up to 19.
 2026-05-03. 15 stocks above dc. Same status. DJI is up 49499, VIX down to 17.
 2026-05-14. 15 stocks above dc. MCD out. AMZN in. DJI up to 49760, VIX up 18.
+2026-06-07. 17 stocks above dc. BA, UNH in. DJI up 50867, VIX up to 21. DJI all time high this week.
 
 ```{r}
 # check the selected stocks
