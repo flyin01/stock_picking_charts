@@ -547,6 +547,7 @@ GS, JPM passed death cross while AXP, MRK are still above on 2022-02-23.
 2026-05-14. 15 stocks above dc. MCD out. AMZN in. DJI up to 49760, VIX up 18.
 2026-06-07. 17 stocks above dc. BA, UNH in. DJI up 50867, VIX up to 21. DJI all time high this week.
 2026-06-26. 18 stocks above dc. JPM in. DJI up 51849, VIX down to 19. DJI ath.
+2026-07-16. 19 stocks above dc. GOOGL in. DJI up 52658, VIX down to 15. 
 
 ```{r}
 # check the selected stocks
